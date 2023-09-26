@@ -42,9 +42,12 @@ The SOLID principles are a set of five design principles that are intended to he
 
 ## Liskov Substitution Principle (LSP)
 
+- Objects of a derived class must be able to replace objects of the base class without affecting the correctness of the program.
+
+- In other words, a derived class should be substitutable for its base class without altering the desirable properties of the program.
+
+- Ensures that inheritance hierarchies are well-designed and don't introduce unexpected behavior.
+
 ## Interface Segregation Principle (ISP)
 
-
 ## Dependency Inversion Principle (DIP)
-
-

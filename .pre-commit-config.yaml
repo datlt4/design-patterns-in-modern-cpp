@@ -26,6 +26,12 @@ repos:
   - id: remove-tabs
     exclude: "^3rdparty/"
 
+# Checks for a trailing blank line
+- repo: https://github.com/pre-commit/mirrors-trailing-whitespace
+  rev: v3.2.0  # Use the latest release tag
+  hooks:
+  - id: trailing-whitespace
+
 # PyLint has native support - not always usable, but works for us
 - repo: https://github.com/PyCQA/pylint
   rev: "v2.17.1"
