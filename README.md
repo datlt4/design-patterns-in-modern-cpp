@@ -27,14 +27,20 @@ The SOLID principles are a set of five design principles that are intended to he
 ## Single Responsibility Principle (SRP)
 
 - A class should have only one reason to change.
+
 - It means that a class should have a single responsibility, and all its services should be narrowly aligned with that responsibility.
+
 - This principle encourages the separation of concerns and helps in making classes and methods easier to understand and maintain.
 
 ## Open-Closed Principle (OCP)
 
+- Software entities (classes, modules, functions) should be open for extension but closed for modification.
+
+- It encourages developers to design their software components in a way that allows for adding new functionality (extension) without changing existing code (modification).
+
+- Achieved through the use of interfaces, abstract classes, and polymorphism.
 
 ## Liskov Substitution Principle (LSP)
-
 
 ## Interface Segregation Principle (ISP)
 

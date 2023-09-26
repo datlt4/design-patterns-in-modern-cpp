@@ -17,7 +17,8 @@ message(STATUS "Library directories: ${LIB}")
 
 # Add sources List of target names
 set(TARGET_NAMES
-    "Creational.Creational.SRP"
+  "Creational.Creational.SRP"
+  "Creational.Creational.OCP"
 )
 
 # Loop through the target names and add sources for each
