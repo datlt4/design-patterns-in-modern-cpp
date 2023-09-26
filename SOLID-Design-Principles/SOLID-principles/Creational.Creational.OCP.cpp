@@ -59,11 +59,9 @@ struct ProductFilter
     }
 };
 
-template <typename T>
-struct AndSpecification;
+template <typename T> struct AndSpecification;
 
-template <typename T>
-struct Specification
+template <typename T> struct Specification
 {
     virtual ~Specification() = default;
     virtual bool is_satisfied(T *item) const = 0;
@@ -76,14 +74,12 @@ struct Specification
 };
 
 // new:
-template <typename T>
-AndSpecification<T> operator&&(const Specification<T> &first, const Specification<T> &second)
+template <typename T> AndSpecification<T> operator&&(const Specification<T> &first, const Specification<T> &second)
 {
     return {first, second};
 }
 
-template <typename T>
-struct Filter
+template <typename T> struct Filter
 {
     virtual std::vector<T *> filter(std::vector<T *> items, Specification<T> &spec) = 0;
 };
@@ -128,8 +124,7 @@ struct SizeSpecification : Specification<Product>
     }
 };
 
-template <typename T>
-struct AndSpecification : Specification<T>
+template <typename T> struct AndSpecification : Specification<T>
 {
     const Specification<T> &first;
     const Specification<T> &second;
@@ -157,7 +152,7 @@ int main()
     BetterFilter bf;
     ColorSpecification green(Color::green);
     Items green_things = bf.filter(all, green);
-    for (Product * &x : green_things)
+    for (Product *&x : green_things)
         std::cout << x->name << " is green" << std::endl;
 
     SizeSpecification large(Size::large);
@@ -166,8 +161,8 @@ int main()
     // auto big_green_things = bf.filter(all, green_and_large);
 
     // use the operator instead (same for || etc.)
-    ColorSpecification  spec = green && large;
-    for (Product * &x : bf.filter(all, spec))
+    ColorSpecification spec = green && large;
+    for (Product *&x : bf.filter(all, spec))
         std::cout << x->name << " is green and large" << std::endl;
 
     // warning: the following will compile but will NOT work
