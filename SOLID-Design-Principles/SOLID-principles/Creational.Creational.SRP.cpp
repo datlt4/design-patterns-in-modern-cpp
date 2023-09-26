@@ -4,6 +4,9 @@
 #include <string>
 #include <vector>
 
+/**
+ * Represents a journal with a title and a collection of journal entries.
+ */
 struct Journal
 {
     std::string title;
@@ -19,12 +22,18 @@ struct Journal
     void save(const std::string &filename);
 };
 
+/**
+ * Add a journal entry to the journal.
+ */
 void Journal::add(const std::string &entry)
 {
     static int count = 1;
     entries.push_back(boost::lexical_cast<std::string>(count++) + ": " + entry);
 }
 
+/**
+ * Save the journal's entries to a file with the given filename.
+ */
 void Journal::save(const std::string &filename)
 {
     std::ofstream ofs(filename);
@@ -32,6 +41,9 @@ void Journal::save(const std::string &filename)
         ofs << s << std::endl;
 }
 
+/**
+ * Saves the journal entries to a file with the given filename.
+ */
 struct PersistenceManager
 {
     static void save(const Journal &j, const std::string &filename)

@@ -20,6 +20,9 @@ enum class Size
     large
 };
 
+/**
+ * Represents a product with a name, color, and size.
+ */
 struct Product
 {
     std::string name;
@@ -27,8 +30,16 @@ struct Product
     Size size;
 };
 
+/**
+ * Alias for a vector of pointers to Product objects.
+ */
 typedef std::vector<Product *> Items;
 
+/**
+ * Contains methods to filter a collection of products based on color, size, or both.
+ * @param: a collection of products
+ * @return: a filtered collection
+ */
 struct ProductFilter
 {
     Items by_color(Items items, const Color color)
@@ -59,43 +70,24 @@ struct ProductFilter
     }
 };
 
-template <typename T> struct AndSpecification;
-
+/**
+ * A generic interface for defining product specifications.
+ */
 template <typename T> struct Specification
 {
     virtual ~Specification() = default;
     virtual bool is_satisfied(T *item) const = 0;
 
     // new: breaks OCP if you add it post-hoc
-    /*AndSpecification<T> operator&&(Specification<T>&& other)
-    {
-      return AndSpecification<T>(*this, other);
-    }*/
+    // AndSpecification<T> operator&&(Specification<T>&& other)
+    // {
+    //     return AndSpecification<T>(*this, other);
+    // }
 };
 
-// new:
-template <typename T> AndSpecification<T> operator&&(const Specification<T> &first, const Specification<T> &second)
-{
-    return {first, second};
-}
-
-template <typename T> struct Filter
-{
-    virtual std::vector<T *> filter(std::vector<T *> items, Specification<T> &spec) = 0;
-};
-
-struct BetterFilter : Filter<Product>
-{
-    std::vector<Product *> filter(std::vector<Product *> items, Specification<Product> &spec) override
-    {
-        std::vector<Product *> result;
-        for (auto &p : items)
-            if (spec.is_satisfied(p))
-                result.push_back(p);
-        return result;
-    }
-};
-
+/**
+ * Specifications that check if a product's color matches a specified criterion.
+ */
 struct ColorSpecification : Specification<Product>
 {
     Color color;
@@ -110,6 +102,9 @@ struct ColorSpecification : Specification<Product>
     }
 };
 
+/**
+ * Specifications that check if a product's size matches a specified criterion.
+ */
 struct SizeSpecification : Specification<Product>
 {
     Size size;
@@ -124,6 +119,44 @@ struct SizeSpecification : Specification<Product>
     }
 };
 
+/**
+ * Allows combining two specifications using logical AND.
+ */
+template <typename T> struct AndSpecification;
+
+/**
+ * Ensures that a product satisfies both specifications for color and size.
+ */
+template <typename T> AndSpecification<T> operator&&(const Specification<T> &first, const Specification<T> &second)
+{
+    return {first, second};
+}
+
+/**
+ * Implement the filtering process for products based on specifications.
+ * An interface that defines a method to filter a collection of items based on a specification.
+ */
+template <typename T> struct Filter
+{
+    virtual std::vector<T *> filter(std::vector<T *> items, Specification<T> &spec) = 0;
+};
+
+/**
+ * A concrete implementation of Filter for Product items.
+ */
+struct BetterFilter : Filter<Product>
+{
+    Items filter(Items items, Specification<Product> &spec) override
+    {
+        Items result;
+        for (auto &p : items)
+            if (spec.is_satisfied(p))
+                result.push_back(p);
+        return result;
+    }
+};
+
+// new:
 template <typename T> struct AndSpecification : Specification<T>
 {
     const Specification<T> &first;
@@ -139,7 +172,15 @@ template <typename T> struct AndSpecification : Specification<T>
     }
 };
 
-// new:
+/**
+ * The code allows for the extension of functionality without modifying existing classes. It achieves this through the
+ * use of abstract base classes (`Specification<T>`) and the ability to create new concrete classes that implement these
+ * specifications. For example, you can create new `ColorSpecification` and `SizeSpecification` classes without changing
+ * the existing `Filter` or `BetterFilter` classes.
+ *
+ * The existing classes (`Filter`, `BetterFilter`, `Specification`, etc.) are designed in a way that they don't need to
+ * be modified when adding new filtering criteria
+ */
 
 int main()
 {
@@ -157,11 +198,11 @@ int main()
 
     SizeSpecification large(Size::large);
     AndSpecification<Product> green_and_large(green, large);
-
-    // auto big_green_things = bf.filter(all, green_and_large);
+    for (Product *&x : bf.filter(all, green_and_large))
+        std::cout << x->name << " is green and large" << std::endl;
 
     // use the operator instead (same for || etc.)
-    ColorSpecification spec = green && large;
+    AndSpecification<Product> spec = (green && large);
     for (Product *&x : bf.filter(all, spec))
         std::cout << x->name << " is green and large" << std::endl;
 
