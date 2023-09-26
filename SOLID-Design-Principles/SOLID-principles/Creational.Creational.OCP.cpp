@@ -156,8 +156,8 @@ int main()
 
     BetterFilter bf;
     ColorSpecification green(Color::green);
-    auto green_things = bf.filter(all, green);
-    for (auto &x : green_things)
+    Items green_things = bf.filter(all, green);
+    for (Product * &x : green_things)
         std::cout << x->name << " is green" << std::endl;
 
     SizeSpecification large(Size::large);
@@ -166,8 +166,8 @@ int main()
     // auto big_green_things = bf.filter(all, green_and_large);
 
     // use the operator instead (same for || etc.)
-    auto spec = green && large;
-    for (auto &x : bf.filter(all, spec))
+    ColorSpecification  spec = green && large;
+    for (Product * &x : bf.filter(all, spec))
         std::cout << x->name << " is green and large" << std::endl;
 
     // warning: the following will compile but will NOT work
