@@ -20,6 +20,7 @@ set(TARGET_NAMES
   "Creational.Creational.SRP"
   "Creational.Creational.OCP"
   "Creational.Creational.LSP"
+  "Creational.Creational.ISP"
 )
 
 # Loop through the target names and add sources for each

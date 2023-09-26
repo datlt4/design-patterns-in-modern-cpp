@@ -50,4 +50,10 @@ The SOLID principles are a set of five design principles that are intended to he
 
 ## Interface Segregation Principle (ISP)
 
+- Clients should not be forced to depend on interfaces they do not use.
+
+- It suggests that a class should not be required to implement interfaces it does not need.
+
+- Promotes the creation of small, specific interfaces rather than large, general-purpose ones.
+
 ## Dependency Inversion Principle (DIP)
